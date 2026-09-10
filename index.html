@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Admin 4/4/48</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d1526">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" sizes="192x192">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#0d1526;color:#e8e3d8;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  padding:env(safe-area-inset-top) 16px calc(env(safe-area-inset-bottom) + 24px)}
+.serif{font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif}
+header{max-width:720px;margin:0 auto;padding:24px 0 8px}
+main{max-width:720px;margin:0 auto}
+h1{font-size:28px;line-height:1.2;margin:4px 0 0}
+.jm{color:#c8a24a;font-size:13px;letter-spacing:.02em}
+.rule{height:2px;width:150px;background:linear-gradient(90deg,#c8a24a,transparent);margin:12px 0}
+p.lead{color:#a8b0c0;font-size:14px;line-height:1.55;margin:0}
+.meta{color:#7d8698;font-size:12px;margin:8px 0 0}
+.card{border:1px solid #22304a;border-radius:10px;background:#111c31;margin:12px 0;display:flex;overflow:hidden}
+.bar{width:6px;flex:0 0 6px}
+.body{padding:16px;flex:1;min-width:0}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+h2{font-size:18px;margin:0;line-height:1.3}
+.org{color:#8f9aad;font-size:13px;margin:2px 0 0}
+.st{flex:0 0 auto;font-size:12px;padding:6px 12px;border-radius:999px;background:none;border:1px solid #3a4c6e;color:#8f9aad}
+.st.env{border-color:#c8a24a;color:#e0bd68}
+.st.val{border-color:#5b9279;color:#7fc0a0}
+.due{font-size:13px;color:#a8b0c0;margin:12px 0 0}
+.due b{color:#e8e3d8;font-weight:500}
+.pj{font-size:12px;color:#7d8698;margin:4px 0 0}
+button{font-family:inherit;cursor:pointer}
+.go{margin-top:12px;font-size:14px;padding:9px 16px;border-radius:8px;background:#c8a24a;color:#0d1526;border:0;font-weight:600}
+.go:disabled{opacity:.4}
+.ghost{background:none;border:1px solid #3a4c6e;color:#a8b0c0;font-size:14px;padding:9px 16px;border-radius:8px}
+.box{border:1px solid #22304a;border-radius:10px;background:#111c31;padding:16px;margin:12px 0}
+label{display:block;font-size:13px;color:#a8b0c0;margin-bottom:8px}
+input,textarea{width:100%;background:#0d1526;border:1px solid #22304a;border-radius:8px;
+  padding:10px 12px;color:#e8e3d8;font-size:14px;font-family:inherit}
+input:focus,textarea:focus{outline:none;border-color:#c8a24a}
+pre{white-space:pre-wrap;word-wrap:break-word;font-family:inherit;font-size:14px;
+  line-height:1.6;color:#ddd8cc;margin:0}
+.out{border-color:rgba(200,162,74,.4)}
+.row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.note{font-size:12px;color:#5b6577;line-height:1.6;margin:20px 0 0}
+.err{color:#e08b7a;font-size:14px;margin:8px 0}
+.tabs{display:flex;gap:8px;margin:16px 0 4px}
+.tab{flex:1;background:none;border:1px solid #22304a;color:#8f9aad;padding:10px;border-radius:8px;font-size:13px}
+.tab.on{border-color:#c8a24a;color:#e8e3d8;background:#111c31}
+.hide{display:none}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(13,21,38,.3);
+  border-top-color:#0d1526;border-radius:50%;animation:s .7s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes s{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.spin{animation:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="logo.svg" alt="" width="56" height="56" style="display:block;border-radius:12px;margin-bottom:10px">
+  <p class="jm" id="jm"></p>
+  <h1 class="serif">Le dossier administratif de la Saintes 4/4/48</h1>
+  <div class="rule"></div>
+  <p class="lead">Quatorze démarches calées sur les 3, 4 et 5 juin 2028. Le statut se change d'un appui, le courrier s'écrit tout seul.</p>
+  <p class="meta" id="reste"></p>
+</header>
+
+<main>
+  <div class="tabs">
+    <button class="tab on" data-v="liste">Démarches</button>
+    <button class="tab" data-v="question">Conseil</button>
+    <button class="tab" data-v="reglages">Réglages</button>
+  </div>
+
+  <section id="v-liste">
+    <div id="liste"></div>
+    <div class="box">
+      <label for="consigne">Précision à passer à l'agent avant de rédiger</label>
+      <input id="consigne" placeholder="Ex. la CDA a déjà donné un accord de principe">
+    </div>
+  </section>
+
+  <section id="v-question" class="hide">
+    <div class="box">
+      <label for="q">Une question sur une procédure</label>
+      <textarea id="q" rows="4" placeholder="Ex. dans quel ordre saisir la préfecture et le gestionnaire du fleuve ?"></textarea>
+      <button class="go" id="askBtn">Demander la marche à suivre</button>
+      <pre id="rep" style="margin-top:16px"></pre>
+    </div>
+  </section>
+
+  <section id="v-reglages" class="hide">
+    <div class="box">
+      <label for="key">Clé API Anthropic</label>
+      <input id="key" type="password" placeholder="sk-ant-...">
+      <p class="note" style="margin-top:10px">Elle reste sur ce téléphone, dans le stockage du navigateur. Elle n'est envoyée qu'à l'API d'Anthropic, jamais ailleurs. À créer sur console.anthropic.com.</p>
+      <div class="row">
+        <button class="go" id="saveKey">Enregistrer la clé</button>
+        <button class="ghost" id="wipe">Tout réinitialiser</button>
+      </div>
+      <p class="meta" id="keyState"></p>
+    </div>
+    <div class="box">
+      <label>Sauvegarde du suivi</label>
+      <div class="row" style="margin-top:0">
+        <button class="ghost" id="exportBtn">Exporter le suivi</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="outWrap"></div>
+  <p class="note">Les délais affichés sont des repères d'organisation, pas des délais légaux opposables. Les seuils exacts se confirment auprès du bureau des manifestations sportives de la préfecture et du gestionnaire de la voie d'eau.</p>
+</main>
+
+<script>
+const EVENT = new Date("2028-06-03T08:00:00");
+
+const FICHE = {
+  nom: "La Saintes 4/4/48",
+  dates: "3, 4 et 5 juin 2028 (week-end de Pentecôte)",
+  lieu: "Charente, à Saintes (Charente-Maritime)",
+  nature: "Manifestation sportive d'endurance en stand up paddle sur parcours fluvial urbain, sans véhicule à moteur, en continu sur 48 heures, de jour comme de nuit.",
+  concept: "Format inspiré du défi 4/4/48 : une manche toutes les 4 heures pendant 48 heures. Quatre formats : Solo 4/4/48, Solo 8/4/48, Équipe de 2, Équipe de 4.",
+  effectifs: "Environ 70 bénévoles sur 11 pôles d'organisation. Public attendu sur les berges en centre-ville.",
+  caritatif: "Association bénéficiaire : Les Bagouz' à Manon, lutte contre les cancers pédiatriques.",
+  organisateur: "Grégory, organisateur, cheminot SNCF et pratiquant d'ultra-endurance en SUP. Site : saintes448.fr",
+  age: "Âge minimum 16 ans, autorisation parentale obligatoire pour les mineurs."
+};
+
+const F = {Cadre:"#c8a24a",Fleuve:"#4a7fa6",Ville:"#8a6bb0",Secours:"#c05f4f",Environnement:"#5b9279"};
+const STATUTS = ["À lancer","Envoyé","Validé"];
+
+const D = [
+{id:"ffs",t:"Accréditation fédérale",o:"Fédération Française de Surf",j:400,f:"Cadre",
+ pj:"Demande d'accréditation, dossier de présentation, lettre d'engagement",
+ a:"Une lettre de demande d'accréditation adressée à la FFS, argumentée sur le sérieux du dispositif sportif et sécuritaire.",
+ p:["Rattachement du format 4/4/48 aux disciplines SUP reconnues","Encadrement, sécurité nautique, qualification des juges","Règlement de l'épreuve et catégories"]},
+{id:"natura",t:"Évaluation d'incidences environnementales",o:"LPO 17 / DDTM 17",j:330,f:"Environnement",
+ pj:"Note d'incidences, demande d'avis consultatif",
+ a:"Un courrier de demande d'avis accompagné d'une note sur l'impact du passage nocturne, de l'éclairage et de la fréquentation des berges.",
+ p:["Navigation nocturne et perturbation de l'avifaune","Choix d'éclairage, limitation du bruit, gestion des déchets","Zones de mise à l'eau et piétinement des berges"]},
+{id:"aot",t:"Occupation du domaine public fluvial",o:"Agence fluviale du Département 17 — aotfluvial@charente-maritime.fr",j:300,f:"Fleuve",
+ pj:"Demande d'AOT, plan du parcours, plage horaire d'occupation",
+ a:"Une demande d'autorisation d'occupation temporaire du domaine public fluvial pour le parcours, les pontons et la zone de départ.",
+ p:["Emprise exacte et durée continue de 48 heures","Cohabitation avec la plaisance et les bateaux promenade","Balisage, retrait des installations, remise en état"]},
+{id:"nuit",t:"Navigation et balisage de nuit",o:"Agence fluviale 17 / gestionnaire de la voie d'eau",j:270,f:"Fleuve",
+ pj:"Note technique de navigation nocturne",
+ a:"Une note technique justifiant la navigation nocturne : signalisation des paddles, éclairage du parcours, moyens de suivi, règles d'interruption.",
+ p:["Feux et matériel réfléchissant sur chaque board","Bateaux suiveurs et points de contrôle éclairés","Critères d'arrêt : brouillard, crue, débit, orage"]},
+{id:"mairie",t:"Autorisation municipale et arrêtés",o:"Mairie de Saintes",j:240,f:"Ville",
+ pj:"Occupation des quais, arrêtés de circulation et de stationnement",
+ a:"Une demande d'occupation du domaine public communal et de prise d'arrêtés pour le village course, le stationnement et les accès secours.",
+ p:["Emplacement du village course et des sanitaires","Nuisance sonore nocturne et voisinage","Accès pompiers maintenu en permanence"]},
+{id:"cda",t:"Convention avec l'agglomération",o:"CDA de Saintes — Jean-Marc Audouin",j:240,f:"Ville",
+ pj:"Projet de convention de partenariat logistique",
+ a:"Un projet de convention précisant les moyens mis à disposition, les responsabilités de chaque partie et les contreparties en visibilité.",
+ p:["Mise à disposition de sites, matériel, personnel technique","Assurances et responsabilités respectives","Communication institutionnelle associée"]},
+{id:"rgpd",t:"Conformité des inscriptions",o:"Interne — registre RGPD",j:210,f:"Cadre",
+ pj:"Registre des traitements, mentions d'information, autorisations parentales",
+ a:"Les mentions d'information à intégrer au formulaire d'inscription et la fiche du registre des traitements.",
+ p:["Données de santé et contacts d'urgence","Droit à l'image sur un événement médiatisé","Durée de conservation et sous-traitants"]},
+{id:"dps",t:"Dispositif prévisionnel de secours",o:"Croix-Rouge française — délégation 17",j:200,f:"Secours",
+ pj:"Convention DPS, grille d'évaluation des risques",
+ a:"Une demande de DPS chiffrée à partir de la grille d'évaluation, tenant compte d'une épreuve continue de 48 heures avec public.",
+ p:["Effectif participants, public, durée, indice de risque","Poste de secours, moyens nautiques, relèves de nuit","Chaîne d'alerte avec le PC course"]},
+{id:"sdis",t:"Avis des services d'incendie et de secours",o:"SDIS 17",j:180,f:"Secours",
+ pj:"Dossier sécurité, plan d'intervention",
+ a:"Un courrier de saisine avec le plan d'intervention : accès engins, points de berge praticables, procédure homme à l'eau.",
+ p:["Points d'extraction repérés le long du parcours","Récupération d'un paddler en difficulté de nuit","Coordonnées et fréquence du PC course"]},
+{id:"assurance",t:"Assurance de la manifestation",o:"Assureur de l'organisateur",j:150,f:"Cadre",
+ pj:"Demande de devis RC organisateur, attestation",
+ a:"Une demande de devis détaillée permettant de tarifer une épreuve nautique nocturne de 48 heures.",
+ p:["RC organisateur, bénévoles, individuelle accident","Matériel prêté et village course","Caractère nocturne et fluvial de l'épreuve"]},
+{id:"cerfa",t:"Déclaration en préfecture",o:"Préfecture de la Charente-Maritime — CERFA 15030*01",j:120,f:"Cadre",
+ pj:"CERFA 15030*01, règlement, parcours, attestation d'assurance, avis des services",
+ a:"Le courrier d'accompagnement du dossier de déclaration, listant les pièces jointes et rappelant les avis déjà obtenus.",
+ p:["Manifestation sportive sans véhicule à moteur","Récapitulatif des avis SDIS, secours, gestionnaire fluvial","Nom et coordonnées de l'organisateur responsable"]},
+{id:"benevoles",t:"Encadrement des bénévoles",o:"Interne",j:100,f:"Secours",
+ pj:"Charte bénévole, liste nominative, couverture assurance",
+ a:"La note d'organisation des bénévoles : rattachement juridique, couverture, obligations et conduite à tenir.",
+ p:["Rattachement à l'association support et couverture","Postes sensibles : sécurité nautique, nuit, circulation","Défraiement et restauration"]},
+{id:"buvette",t:"Buvette temporaire",o:"Mairie de Saintes",j:75,f:"Ville",
+ pj:"Demande d'ouverture de débit de boissons temporaire",
+ a:"La demande d'autorisation d'ouverture d'un débit de boissons temporaire au profit de l'association, avec horaires et catégorie.",
+ p:["Association bénéficiaire et responsable désigné","Horaires d'ouverture sur les trois jours","Prévention et boissons sans alcool à prix attractif"]},
+{id:"sacem",t:"Déclaration musique",o:"SACEM",j:45,f:"Ville",
+ pj:"Déclaration de séance, programme sonore",
+ a:"La déclaration préalable de diffusion musicale sur le village course, avec plages horaires et caractère caritatif.",
+ p:["Diffusion sonorisée sur le village et les remises de prix","Plages horaires respectant l'arrêté bruit","Demande d'abattement au titre du caractère caritatif"]}
+];
+
+const SYS = `Tu es le bras droit administratif de l'organisateur de La Saintes 4/4/48.
+
+Tu rédiges en français, en écrivant comme un humain qui connaît son dossier : phrases claires, ton direct et incarné, aucune formule creuse, aucun jargon corporate, aucun superlatif marketing. Le registre est celui d'un organisateur sérieux qui s'adresse à une administration ou à un partenaire : respectueux, précis, jamais servile.
+
+Règles :
+- Courrier prêt à envoyer : en-tête expéditeur, destinataire, objet, corps, formule de politesse, signature.
+- Tu vas droit au fait dès le premier paragraphe : qui écrit, pour quoi, pour quelle date.
+- Des éléments concrets et vérifiables plutôt que des intentions.
+- Pièces jointes listées en fin de courrier quand c'est pertinent.
+- Tu signales entre crochets ce que l'organisateur doit compléter : [numéro SIRET], [adresse]. Tu n'inventes jamais un chiffre, une référence légale précise ou un nom de service dont tu n'es pas sûr.
+- Une page maximum, sauf demande contraire.
+
+Tu n'es pas juriste : quand une exigence dépend du terrain, tu le dis en une ligne à la fin, hors du courrier, sous la mention "À vérifier :".`;
+
+// --- stockage local ---
+const S = {
+  get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)) }catch(e){} }
+};
+let statuts = S.get("448.statuts",{});
+let cle = S.get("448.cle","");
+
+const ech = j => { const d=new Date(EVENT); d.setDate(d.getDate()-j); return d };
+const fmt = d => d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// --- appel API ---
+async function claude(prompt){
+  if(!cle) throw new Error("nokey");
+  const r = await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "x-api-key":cle,
+      "anthropic-version":"2023-06-01",
+      "anthropic-dangerous-direct-browser-access":"true"
+    },
+    body:JSON.stringify({
+      model:"claude-sonnet-4-6",
+      max_tokens:2000,
+      system:SYS,
+      messages:[{role:"user",content:prompt}]
+    })
+  });
+  if(!r.ok) throw new Error("http "+r.status);
+  const d = await r.json();
+  return d.content.map(b=>b.type==="text"?b.text:"").filter(Boolean).join("\n");
+}
+
+const contexte = () => Object.entries(FICHE).map(([k,v])=>k+" : "+v).join("\n");
+
+// --- rendu ---
+function render(){
+  const jours = Math.ceil((EVENT-new Date())/86400000);
+  document.getElementById("jm").textContent = jours>0 ? "J−"+jours+" avant le départ" : "Départ imminent";
+  const items = [...D].sort((a,b)=>b.j-a.j);
+  const ouverts = items.filter(x=>(statuts[x.id]||STATUTS[0])!=="Validé").length;
+  document.getElementById("reste").textContent =
+    ouverts+" démarche"+(ouverts>1?"s":"")+" encore ouverte"+(ouverts>1?"s":"");
+
+  document.getElementById("liste").innerHTML = items.map(d=>{
+    const st = statuts[d.id]||STATUTS[0];
+    const cls = st==="Validé"?"val":st==="Envoyé"?"env":"";
+    return `<article class="card">
+      <div class="bar" style="background:${F[d.f]}"></div>
+      <div class="body">
+        <div class="top">
+          <div style="min-width:0">
+            <h2 class="serif">${esc(d.t)}</h2>
+            <p class="org">${esc(d.o)}</p>
+          </div>
+          <button class="st ${cls}" data-st="${d.id}">${st}</button>
+        </div>
+        <p class="due">À déposer avant le <b>${fmt(ech(d.j))}</b></p>
+        <p class="pj">${esc(d.pj)}</p>
+        <button class="go" data-gen="${d.id}">Écrire le document</button>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+// --- interactions ---
+document.addEventListener("click", async e=>{
+  const st = e.target.closest("[data-st]");
+  if(st){
+    const id = st.dataset.st;
+    const cur = statuts[id]||STATUTS[0];
+    statuts[id] = STATUTS[(STATUTS.indexOf(cur)+1)%STATUTS.length];
+    S.set("448.statuts",statuts); render(); return;
+  }
+  const g = e.target.closest("[data-gen]");
+  if(g){ generer(D.find(x=>x.id===g.dataset.gen), g); return; }
+  const t = e.target.closest(".tab");
+  if(t){
+    document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===t));
+    ["liste","question","reglages"].forEach(v=>
+      document.getElementById("v-"+v).classList.toggle("hide",v!==t.dataset.v));
+  }
+});
+
+function outBox(titre, corps, id){
+  document.getElementById("outWrap").innerHTML = `
+    <section class="box out">
+      <h2 class="serif">${esc(titre)}</h2>
+      <div class="rule" style="width:90px"></div>
+      <pre id="outTxt">${esc(corps)}</pre>
+      <div class="row">
+        <button class="go" id="cp">Copier</button>
+        <button class="ghost" id="dl">Télécharger</button>
+      </div>
+    </section>`;
+  document.getElementById("cp").onclick = ()=>{
+    navigator.clipboard.writeText(corps);
+    document.getElementById("cp").textContent="Copié";
+    setTimeout(()=>document.getElementById("cp").textContent="Copier",1500);
+  };
+  document.getElementById("dl").onclick = ()=>{
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([corps],{type:"text/plain;charset=utf-8"}));
+    a.download="448-"+id+".txt"; a.click();
+  };
+  document.getElementById("outWrap").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+async function generer(d, btn){
+  if(!cle){ outBox("Clé manquante","Ajoute ta clé API dans l'onglet Réglages pour que l'agent puisse rédiger.","cle"); return; }
+  const label = btn.textContent;
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Rédaction en cours';
+  const consigne = document.getElementById("consigne").value.trim();
+  try{
+    const txt = await claude(
+`Contexte de l'événement :
+${contexte()}
+
+Démarche à traiter : ${d.t}
+Destinataire : ${d.o}
+Échéance de dépôt visée : ${fmt(ech(d.j))}
+Pièces concernées : ${d.pj}
+
+Livrable attendu : ${d.a}
+
+Points qui doivent apparaître :
+${d.p.map(x=>"- "+x).join("\n")}
+${consigne ? "\nConsigne supplémentaire de l'organisateur : "+consigne : ""}
+
+Rédige le document, prêt à être envoyé.`);
+    outBox(d.t, txt, d.id);
+  }catch(err){
+    outBox("La rédaction n'a pas abouti",
+      err.message==="nokey" ? "Ajoute ta clé API dans l'onglet Réglages."
+      : "L'API n'a pas répondu ("+err.message+"). Vérifie ta connexion et ta clé, puis relance.","erreur");
+  }
+  btn.disabled=false; btn.textContent=label;
+}
+
+document.getElementById("askBtn").onclick = async function(){
+  const q = document.getElementById("q").value.trim();
+  if(!q) return;
+  const rep = document.getElementById("rep");
+  this.disabled=true; this.innerHTML='<span class="spin"></span>Recherche en cours';
+  rep.textContent="";
+  try{
+    rep.textContent = await claude(
+`Contexte de l'événement :
+${contexte()}
+
+Démarches déjà cadrées : ${D.map(d=>d.t).join(", ")}
+
+Question de l'organisateur : ${q}
+
+Réponds court et opérationnel : ce qu'il faut faire, auprès de qui, dans quel ordre. Pas de courrier ici, juste la marche à suivre.`);
+  }catch(err){
+    rep.textContent = err.message==="nokey"
+      ? "Ajoute ta clé API dans l'onglet Réglages."
+      : "Pas de réponse obtenue ("+err.message+"). Repose la question.";
+  }
+  this.disabled=false; this.textContent="Demander la marche à suivre";
+};
+
+// réglages
+const keyState = document.getElementById("keyState");
+function majKey(){ keyState.textContent = cle ? "Clé enregistrée sur cet appareil." : "Aucune clé enregistrée."; }
+document.getElementById("key").value = cle;
+majKey();
+document.getElementById("saveKey").onclick = ()=>{
+  cle = document.getElementById("key").value.trim();
+  S.set("448.cle",cle); majKey();
+};
+document.getElementById("wipe").onclick = ()=>{
+  if(!confirm("Effacer la clé et tous les statuts de démarches ?")) return;
+  localStorage.removeItem("448.statuts"); localStorage.removeItem("448.cle");
+  statuts={}; cle=""; document.getElementById("key").value=""; majKey(); render();
+};
+document.getElementById("exportBtn").onclick = ()=>{
+  const txt = [...D].sort((a,b)=>b.j-a.j).map(d=>
+    (statuts[d.id]||STATUTS[0]).padEnd(9)+" | "+fmt(ech(d.j)).padEnd(22)+" | "+d.t+" — "+d.o
+  ).join("\n");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob(["Suivi administratif — La Saintes 4/4/48\n\n"+txt],{type:"text/plain;charset=utf-8"}));
+  a.download="suivi-admin-448.txt"; a.click();
+};
+
+render();
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
