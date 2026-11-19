@@ -55,6 +55,12 @@ pre{white-space:pre-wrap;word-wrap:break-word;font-family:inherit;font-size:14px
 .tab{flex:1;background:none;border:1px solid #22304a;color:#8f9aad;padding:10px;border-radius:8px;font-size:13px}
 .tab.on{border-color:#c8a24a;color:#e8e3d8;background:#111c31}
 .hide{display:none}
+.insta{display:inline-flex;align-items:center;gap:6px;margin:10px 0 0;color:#e0bd68;font-size:13px;text-decoration:none}
+.insta:hover,.insta:focus-visible{text-decoration:underline}
+.insta svg{width:16px;height:16px;flex:0 0 16px}
+select{width:100%;background:#0d1526;border:1px solid #22304a;border-radius:8px;
+  padding:10px 12px;color:#e8e3d8;font-size:14px;font-family:inherit}
+select:focus{outline:none;border-color:#c8a24a}
 .spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(13,21,38,.3);
   border-top-color:#0d1526;border-radius:50%;animation:s .7s linear infinite;vertical-align:-2px;margin-right:6px}
 @keyframes s{to{transform:rotate(360deg)}}
@@ -70,12 +76,17 @@ pre{white-space:pre-wrap;word-wrap:break-word;font-family:inherit;font-size:14px
   <div class="rule"></div>
   <p class="lead">Quatorze démarches calées sur les 3, 4 et 5 juin 2028. Le statut se change d'un appui, le courrier s'écrit tout seul.</p>
   <p class="meta" id="reste"></p>
+  <a class="insta" id="instaLink" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    <span id="instaTxt"></span>
+  </a>
 </header>
 
 <main>
   <div class="tabs">
     <button class="tab on" data-v="liste">Démarches</button>
     <button class="tab" data-v="question">Conseil</button>
+    <button class="tab" data-v="instagram">Instagram</button>
     <button class="tab" data-v="reglages">Réglages</button>
   </div>
 
@@ -93,6 +104,31 @@ pre{white-space:pre-wrap;word-wrap:break-word;font-family:inherit;font-size:14px
       <textarea id="q" rows="4" placeholder="Ex. dans quel ordre saisir la préfecture et le gestionnaire du fleuve ?"></textarea>
       <button class="go" id="askBtn">Demander la marche à suivre</button>
       <pre id="rep" style="margin-top:16px"></pre>
+    </div>
+  </section>
+
+  <section id="v-instagram" class="hide">
+    <div class="box">
+      <label for="igMoment">Le moment à annoncer</label>
+      <select id="igMoment">
+        <option>Annonce de l'événement</option>
+        <option>Ouverture des inscriptions</option>
+        <option>Nouveau sponsor</option>
+        <option>Coulisses de l'organisation</option>
+        <option>Compte à rebours</option>
+        <option>Appel aux bénévoles</option>
+        <option>Les Bagouz' à Manon</option>
+      </select>
+      <label for="igFormat" style="margin-top:14px">Format</label>
+      <select id="igFormat">
+        <option>Post simple</option>
+        <option>Carrousel</option>
+        <option>Reel</option>
+        <option>Story</option>
+      </select>
+      <label for="igSujet" style="margin-top:14px">Ce qu'il faut dire</label>
+      <textarea id="igSujet" rows="3" placeholder="Ex. la boulangerie Dupont rejoint les sponsors Argent"></textarea>
+      <button class="go" id="igBtn">Écrire la publication</button>
     </div>
   </section>
 
@@ -131,8 +167,11 @@ const FICHE = {
   effectifs: "Environ 70 bénévoles sur 11 pôles d'organisation. Public attendu sur les berges en centre-ville.",
   caritatif: "Association bénéficiaire : Les Bagouz' à Manon, lutte contre les cancers pédiatriques.",
   organisateur: "Grégory, organisateur, cheminot SNCF et pratiquant d'ultra-endurance en SUP. Site : saintes448.fr",
+  instagram: "@saintes4448 (instagram.com/saintes4448)",
   age: "Âge minimum 16 ans, autorisation parentale obligatoire pour les mineurs."
 };
+
+const INSTA = "saintes4448";
 
 const F = {Cadre:"#c8a24a",Fleuve:"#4a7fa6",Ville:"#8a6bb0",Secours:"#c05f4f",Environnement:"#5b9279"};
 const STATUTS = ["À lancer","Envoyé","Validé"];
@@ -210,6 +249,19 @@ Règles :
 
 Tu n'es pas juriste : quand une exigence dépend du terrain, tu le dis en une ligne à la fin, hors du courrier, sous la mention "À vérifier :".`;
 
+const SYS_IG = `Tu tiens le compte Instagram @${INSTA} de La Saintes 4/4/48.
+
+Tu écris en français comme l'organisateur lui-même : direct, chaleureux, concret, avec l'énergie d'un passionné de paddle. Pas de jargon marketing, pas de superlatifs creux, emojis avec parcimonie.
+
+Règles :
+- Première ligne : une accroche forte qui arrête le pouce.
+- Texte court, aéré, lisible sur téléphone. Un appel à l'action clair à la fin (s'inscrire, partager, venir sur les berges, lien en bio vers saintes448.fr).
+- 5 à 8 hashtags utiles, sur une ligne à part en fin de légende.
+- Carrousel : le texte slide par slide, puis la légende. Reel : le déroulé plan par plan avec le texte à l'écran, puis la légende. Story : le texte de chaque écran et le sticker conseillé.
+- Après la publication, une ligne "Visuel :" avec une idée de photo ou de visuel.
+- Quand un sponsor est cité, tu le remercies et le mets en valeur ; propose de l'identifier avec [@compte_du_sponsor] à compléter.
+- Tu n'inventes jamais un chiffre, un nom ou un tarif : tu le laisses entre crochets à compléter.`;
+
 // --- stockage local ---
 const S = {
   get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } },
@@ -223,7 +275,7 @@ const fmt = d => d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"
 const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 // --- appel API ---
-async function claude(prompt){
+async function claude(prompt, system=SYS){
   if(!cle) throw new Error("nokey");
   const r = await fetch("https://api.anthropic.com/v1/messages",{
     method:"POST",
@@ -236,7 +288,7 @@ async function claude(prompt){
     body:JSON.stringify({
       model:"claude-sonnet-4-6",
       max_tokens:2000,
-      system:SYS,
+      system,
       messages:[{role:"user",content:prompt}]
     })
   });
@@ -291,7 +343,7 @@ document.addEventListener("click", async e=>{
   const t = e.target.closest(".tab");
   if(t){
     document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===t));
-    ["liste","question","reglages"].forEach(v=>
+    ["liste","question","instagram","reglages"].forEach(v=>
       document.getElementById("v-"+v).classList.toggle("hide",v!==t.dataset.v));
   }
 });
@@ -373,6 +425,37 @@ Réponds court et opérationnel : ce qu'il faut faire, auprès de qui, dans quel
       : "Pas de réponse obtenue ("+err.message+"). Repose la question.";
   }
   this.disabled=false; this.textContent="Demander la marche à suivre";
+};
+
+// instagram
+const instaLink = document.getElementById("instaLink");
+instaLink.href = "https://www.instagram.com/"+INSTA+"/";
+instaLink.setAttribute("aria-label","Compte Instagram @"+INSTA+" (nouvel onglet)");
+document.getElementById("instaTxt").textContent = "@"+INSTA;
+
+document.getElementById("igBtn").onclick = async function(){
+  if(!cle){ outBox("Clé manquante","Ajoute ta clé API dans l'onglet Réglages pour que l'agent puisse rédiger.","cle"); return; }
+  const moment = document.getElementById("igMoment").value;
+  const format = document.getElementById("igFormat").value;
+  const sujet = document.getElementById("igSujet").value.trim();
+  this.disabled=true; this.innerHTML='<span class="spin"></span>Rédaction en cours';
+  try{
+    const txt = await claude(
+`Contexte de l'événement :
+${contexte()}
+
+Moment : ${moment}
+Format : ${format}
+${sujet ? "Ce qu'il faut dire : "+sujet : "Pas de précision : appuie-toi sur le contexte."}
+
+Rédige la publication Instagram, prête à poster.`, SYS_IG);
+    outBox("Instagram — "+moment, txt, "instagram");
+  }catch(err){
+    outBox("La rédaction n'a pas abouti",
+      err.message==="nokey" ? "Ajoute ta clé API dans l'onglet Réglages."
+      : "L'API n'a pas répondu ("+err.message+"). Vérifie ta connexion et ta clé, puis relance.","erreur");
+  }
+  this.disabled=false; this.textContent="Écrire la publication";
 };
 
 // réglages
