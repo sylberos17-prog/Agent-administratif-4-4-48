@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Admin 4/4/48">
+  <defs>
+    <clipPath id="disc"><circle cx="256" cy="256" r="196"/></clipPath>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="#0d1526"/>
+
+  <circle cx="256" cy="256" r="196" fill="none" stroke="#c8a24a" stroke-width="14"/>
+  <circle cx="256" cy="256" r="172" fill="none" stroke="#c8a24a" stroke-width="4" opacity=".5"/>
+
+  <g clip-path="url(#disc)">
+    <!-- pagaie, derrière le pagayeur -->
+    <path d="M162 352 L 344 176" stroke="#c8a24a" stroke-width="15" stroke-linecap="round"/>
+    <path d="M170 346 q -40 4 -46 40 q 30 20 54 -8 z" fill="#c8a24a"/>
+
+    <!-- pagayeur -->
+    <circle cx="252" cy="152" r="26" fill="#e8e3d8"/>
+    <path d="M252 182 L 252 300" stroke="#e8e3d8" stroke-width="26" stroke-linecap="round"/>
+    <path d="M252 210 L 322 190" stroke="#e8e3d8" stroke-width="16" stroke-linecap="round"/>
+
+    <!-- board -->
+    <path d="M172 316 L 350 316" stroke="#e8e3d8" stroke-width="13" stroke-linecap="round"/>
+
+    <!-- la Charente : trois courants -->
+    <path d="M20 350 C 100 326, 150 380, 236 356 S 356 324, 420 356 S 496 374, 512 350"
+          fill="none" stroke="#c8a24a" stroke-width="15" stroke-linecap="round"/>
+    <path d="M12 396 C 96 372, 146 424, 234 400 S 354 368, 418 400 S 494 418, 512 396"
+          fill="none" stroke="#8a7a4a" stroke-width="12" stroke-linecap="round"/>
+    <path d="M6 438 C 92 414, 142 464, 232 442 S 352 412, 416 442 S 492 458, 512 438"
+          fill="none" stroke="#46577a" stroke-width="10" stroke-linecap="round"/>
+  </g>
+</svg>

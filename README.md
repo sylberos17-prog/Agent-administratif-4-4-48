@@ -46,5 +46,5 @@ Tout est dans `index.html` :
 - `FICHE` porte le contexte de l'événement injecté dans chaque génération ;
 - `SYS` définit la façon d'écrire de l'agent.
 
-Après modification, incrémenter `CACHE = "admin448-v2"` dans `sw.js` pour que
+Après modification, incrémenter `CACHE = "admin448-v3"` dans `sw.js` pour que
 les téléphones récupèrent la nouvelle version.
